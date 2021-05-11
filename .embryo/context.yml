@@ -1,0 +1,35 @@
+---
+project/base:
+- embryo:
+    action: hatch
+    name: project/base
+    timestamp: 1620763247.668722
+  project:
+    description: ''
+    name: looksee
+    version: 0.0.0
+python_project/base:
+- embryo:
+    action: hatch
+    name: python_project/base
+    timestamp: 1620763253.770885
+  project: {}
+python_project/setup:
+- config:
+    find_namespace_packages: false
+    find_packages: true
+    refresh_scripts: true
+  embryo:
+    action: hatch
+    name: python_project/setup
+    timestamp: 1620763257.071198
+  metadata:
+    classifiers: []
+    keywords: []
+  options:
+    dependency_links: []
+    install_requires: []
+    packages: []
+    scripts: []
+  project: {}
+...
