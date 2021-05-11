@@ -145,7 +145,7 @@ class Scanner:
             try:
                 self.process(module, k, v, context)
             except Exception as exc:
-                self.on_process_error(exc, module, context, k, v)
+                self.on_callback_error(exc, module, context, k, v)
 
     def match(self, obj: Any) -> bool:
         """
@@ -180,7 +180,7 @@ class Scanner:
         """
         self.log.exception(f'encountered import error in {module_path}')
 
-    def on_process_error(
+    def on_callback_error(
         self,
         exc: Exception,
         module: ModuleType,

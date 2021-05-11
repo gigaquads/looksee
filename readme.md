@@ -57,9 +57,9 @@ def on_import_error(
     """
 ````
 
-### Process Error Hook
+### Callback Error Hook
 ```python
-def on_process_error(
+def on_callback_error(
     self, exc: Exception, module: ModuleType, context: Dict, name: Text, obj: Any
 ):
     """
