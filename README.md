@@ -10,6 +10,12 @@ less annoying. Venusian can be a pain in the arse when it comes to handling
 errors. Often times, you're left scratching your head, trying to figure out
 what, if anything, went wrong.
 
+## Install Looksee
+Clone the repo or just run...
+```sh
+pip install looksee
+```
+
 ## Basic Example
 Here's an example of looksee's `Scanner` being used to scan a fictitious
 package, called `pooply`, for all `PooplyObject` subclasses. When found, we add
