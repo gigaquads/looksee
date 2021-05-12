@@ -10,7 +10,7 @@ less annoying. Venusian can be a true pain in the arse when it comes to handling
 errors. Often times, you're left scratching your head, trying to figure out
 what, if anything, went wrong.
 
-## Birdseye View
+## Basic Example
 Here's an example of looksee's API. It consists of one main `Scanner` class. In
 the example, we scan a fictitious package called `pooply` for all `PooplyObject`
 subclasses. When found, we simply add it to the context dict. Note that the
@@ -33,6 +33,62 @@ found = scanner.scan('pooply')
 for name, class_obj in found.items():
     print(f'detected {name} class: {class_obj}...')
 ```
+
+## Use-cases
+
+### Class Factories
+Sometimes the need arises to get a class by name. For example, imagine you have a YAML config file that specifies a class by name. In Python, you need to take the name and return the class object itself. As a result, you may have a function that looks like this:
+
+```python
+from project.models.user import User
+from project.models.account import Account
+
+class Model:
+
+    @classmethod
+    def factory(cls, class_name: Text) -> Type:
+        if class_name == 'User':
+            return User
+        if class_name == 'Account':
+            return Account
+        else:
+            raise TypeError(class_name)
+```
+
+All is well and good, but sometimes importing a bunch of classes into a single
+module can cause cyclic import errors. To prevent this, you could always move
+the imports into the `factory` function itself, but this is bad form. By using
+the looksee `Scanner`, you could avoid all of this:
+
+```python
+from looksee import Scanner
+
+class Model:
+
+    # lazy loaded global registry of model subclasses
+    model_classes = {}
+
+    # scanner that detects Model subclasses
+    scanner = Scanner(
+        predicate=lambda obj: issubclass(obj, cls),
+        callback=lambda name, obj, ctx: ctx.update({name: obj})
+    )
+
+    @classmethod
+    def factory(cls, class_name: Text) -> Type:
+        # lazily scan resource modules, picking up subclasses
+        if not cls.registry:
+            cls.model_classes = cls.scanner.scan('project.resources')
+
+        # return the named class from the model_classes dict
+        model_class = cls.model_classes.get(class_name)
+        if model_class is None:
+            raise TypeError(class_name)
+
+        return model_class
+```
+
+### Object Registries
 
 ## Example Application
 A complete working example of a scanner being used to scan a fictitious project
